@@ -32,7 +32,9 @@ git clone https://github.com/puriketu99/porky.git
 append = function(){
   $("body").append("test case1");
 };
-```Chromeのjavascriptコンソールから、下記を実行します。
+```
+
+Chromeのjavascriptコンソールから、下記を実行します。
 
 ```javascript:console
 >porky.regist({name:"test1",func:"append"})

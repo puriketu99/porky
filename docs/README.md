@@ -39,13 +39,16 @@ git clone https://github.com/puriketu99/porky.git
 ```
 
 ##テストの登録
+
 下記の関数をテストケースに登録する場合を考えます。
 
 ```coffeescript:テスト対象の関数
 append = function(){
   $("body").append("test case1");
 };
-```Chromeのjavascriptコンソールから、下記を実行します。
+```
+
+Chromeのjavascriptコンソールから、下記を実行します。
 
 ```javascript:console
 >porky.regist({name:"test1",func:"append"})
