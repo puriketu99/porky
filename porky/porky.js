@@ -28,7 +28,7 @@
   window.porky = {};
 
   porky.Db = (function() {
-    var DBNAME, SCHEMA, TABLE, regist_report, report;
+    var DBNAME, SCHEMA, TABLE, register_report, report;
 
     Db.name = 'Db';
 
@@ -45,7 +45,7 @@
       return console.groupEnd("Report");
     };
 
-    regist_report = function(data) {
+    register_report = function(data) {
       console.group("Registed");
       console.log("success");
       console.log(data);
@@ -71,7 +71,7 @@
 
     Db.prototype.put = function(data) {
       return $.indexedDB(DBNAME, SCHEMA).objectStore(TABLE).put(data).then(function() {
-        return regist_report(data);
+        return register_report(data);
       }, report);
     };
 
@@ -94,7 +94,7 @@
   })();
 
   porky.Register = (function() {
-    var DBNAME, TABLE, data, f2s, regist;
+    var DBNAME, TABLE, data, f2s, register;
 
     Register.name = 'Register';
 
@@ -150,7 +150,7 @@
       arg: []
     };
 
-    regist = function() {
+    register = function() {
       var obj;
       data.after_html = document.getElementsByTagName("html")[0].innerHTML;
       if (data.json_paths != null) {
@@ -168,16 +168,16 @@
       return (new porky.Db(DBNAME, TABLE)).put(data);
     };
 
-    function Register(regist_data) {
+    function Register(register_data) {
       var eval_code, field, obj, value;
-      for (field in regist_data) {
-        value = regist_data[field];
+      for (field in register_data) {
+        value = register_data[field];
         data[field] = value;
       }
       if (data.is_ajax) {
         $.ajaxSetup({
           complete: function() {
-            return regist();
+            return register();
           }
         });
       }
@@ -198,7 +198,7 @@
       eval(eval_code);
       if (!data.is_ajax) {
         (function() {
-          return regist();
+          return register();
         })();
       }
     }
@@ -455,7 +455,7 @@
 
   })();
 
-  porky.regist = function(fixture) {
+  porky.register = function(fixture) {
     return new porky.Register(fixture);
   };
 

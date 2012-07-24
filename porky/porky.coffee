@@ -23,7 +23,7 @@ class porky.Db
     console.log error
     console.log event
     console.groupEnd "Report"
-  regist_report = (data)->
+  register_report = (data)->
     console.group "Registed"
     console.log "success"
     console.log data
@@ -43,7 +43,7 @@ class porky.Db
     $.indexedDB(DBNAME,SCHEMA).objectStore(TABLE)
 	    .put(data).then(
 		    ->
-          regist_report(data)
+          register_report(data)
         report
       )
   get:(run)->
@@ -90,23 +90,23 @@ class porky.Register
   data = 
     obj:null
     arg:[]
-  regist = ()->
+  register = ()->
     data.after_html = document.getElementsByTagName("html")[0].innerHTML
     if data.json_paths?
       data.after_window = (f2s obj for obj in data.json_paths) 
     (new porky.Db(DBNAME,TABLE)).put data
-  constructor:(regist_data)->
-    for field,value of regist_data
+  constructor:(register_data)->
+    for field,value of register_data
       data[field] = value
     if data.is_ajax 
-      $.ajaxSetup {complete:->regist()}
+      $.ajaxSetup {complete:->register()}
     if data.json_paths?
       data.before_window = (f2s obj for obj in data.json_paths)
     data.before_html = document.getElementsByTagName("html")[0].innerHTML
     eval_code = "#{data.func}.apply(data.obj,data.arg)"
     eval eval_code
     if !data.is_ajax 
-      do->regist()
+      do->register()
 
 class porky.Runner
   DBNAME = 'PORKY'
@@ -260,6 +260,6 @@ class porky.Deleter
     (new porky.Db(DBNAME,TABLE)).delete(key)
 
 
-porky.regist = (fixture)->(new porky.Register(fixture))
+porky.register = (fixture)->(new porky.Register(fixture))
 porky.run = ()->(new porky.Runner())
 porky.delete = (key)->(new porky.Deleter(key))

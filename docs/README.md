@@ -51,7 +51,7 @@ append = function(){
 Chromeのjavascriptコンソールから、下記を実行します。
 
 ```javascript:console
->porky.regist({name:"test1",func:"append"})
+>porky.register({name:"test1",func:"append"})
 //Registed
 //success
 //Object
@@ -90,7 +90,7 @@ destroy = function(name, father) {
 コンソールから、下記のようにargに引数を指定して登録します。
 
 ```javascript:args引渡し
->porky.regist({
+>porky.register({
     name: "destroy test",
     func: "destroy",
     arg: ["destroyer", "darth vader"],
@@ -121,7 +121,7 @@ ajax = function() {
 コンソールから、下記のようにis_ajaxにtrueを指定して登録します。
 
 ```javascript:args引渡し
->porky.regist({
+>porky.register({
     name: "ajax test",
     func: "ajax",
     is_ajax: true
@@ -139,7 +139,7 @@ destroy = function(name, father) {
 コンソールから、下記のように監視したいオブジェクトのjsonのパスの文字列を配列形式で指定して登録します。
 
 ```javascript:監視オブジェクト指定
->porky.regist(destroy_test = {
+>porky.register(destroy_test = {
     name: "destroy test",
     func: "destroy",
     arg: ["destroyer", "darth vader"],
@@ -149,9 +149,9 @@ destroy = function(name, father) {
 
 ##仕組み
 
-###registしたときにやっていること
+###registerしたときにやっていること
 
-1.registした瞬間のhtmlを保存する。オプションで監視対象のjsonも指定している場合は、対象のjsonオブジェクトも保存。
+1.registerした瞬間のhtmlを保存する。オプションで監視対象のjsonも指定している場合は、対象のjsonオブジェクトも保存。
 
 2.指定された関数を実行する
 
