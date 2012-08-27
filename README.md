@@ -28,7 +28,7 @@ On JavaScript console in Google Chrome,execute as follows.
 
 'name' is the name of the test. 'func' is the name of the function.
 
-Registring test has been done→has been completed.
+Registring test has been completed.
 
 ##Run tests
 
