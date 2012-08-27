@@ -1,4 +1,4 @@
-##Without Coding Test, test automation for JavaScript.
+##Without coding test, test automation for JavaScript.
 
 ##Principal use
 
@@ -9,7 +9,7 @@ This is effective when checking whether there are any other influences when a pa
 
 Test first.
 
-Test first development is good,but it is often a pain to write test code and fix it. 
+Test first development is often effective,but it is often a pain to write test code and fix it. 
 
 ##Example:Register test
 
