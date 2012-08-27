@@ -13,8 +13,6 @@ Test first development is often effective,but it is often a pain to write test c
 
 ##Example:Register test
 
-The following 
-
 Let's think that we register a test for the following function.
 
 ```coffeescript:append
