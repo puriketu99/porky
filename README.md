@@ -4,13 +4,13 @@
 
 Regression test.
 
-This is effective when checking whether there are any other influences when a part is corrected. 
+When you change a part of cord, porky helps you check whether the change influences the other parts.
 
 ##Not suitable use
 
 Test first.
 
-Test first development is often effective,but it is often a pain to write test code and fix it. 
+Test-driven development is often effective,but it is often painful to write a test and fix it.
 
 ##Register a test
 
@@ -20,25 +20,25 @@ Let's think that we register a test for the following function.
 append = function(){$("body").append("test case1");};
 ```
 
-On JavaScript console in Google Chrome,execute as the following.
+On JavaScript console in Google Chrome,execute as follows.
 
 ```javascript:console
 >porky.register({name:"test1",func:"append"})
 ```
 
-'name' is name of test. 'func' is name of function.
+'name' is the name of the test. 'func' is the name of the function.
 
-Registring test has been done.
+Registring test has been done→has been completed.
 
 ##Run tests
 
-On JavaScript console in Google Chrome,Run as the following.
+On JavaScript console in Google Chrome,Run as follows.
 
 ```javascript:console
 >porky.run()
 ```
 
-When you execute pokry.run,print results of tests on the console.
+When you execute pokry.run,print , the results of the tests will be output on the console.
 
 ```yaml:result
 Porky 
@@ -56,23 +56,23 @@ Porky: 25ms
 ##Mechanism
 ###about registering
 
-1.It saves the snapshot of html when you execute 'porky.register()'.If you specify json,it save the json.This is option.
+1.It saves the snapshot of html when you execute 'porky.register()'.If you specify json,it also saves the json.This is option.
 
-2.It executes the function specified.
+2.It executes the specified function.
 
-3.As well As #1、it saves the snapshot after it executes.
+3.it also saves the snapshot of the html or the json after the function are executed in the same way as #1
 
-\#Saved data is saved in indexed db.
+\#the data is saved in the local indexed db.
 
 ###about running
 
-By the test cases,It executes the following.
+In each test case, It executes the following process.
 
 1.It restores html and json to Saved data before executing the function. 
 
 2.It excutes the function.
 
-3.It compares row and saved data after executing the function.
+3.It compares the previous html and json with the present html and json and check whether there is the difference between them or not.
 
 
 ##Getting started
@@ -92,4 +92,4 @@ git clone https://github.com/puriketu99/porky.git
 ```
 
 
-About details,read docs/READ.md
+Read docs/READ to get details.
