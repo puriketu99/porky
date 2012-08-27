@@ -1,11 +1,11 @@
-##Without coding test, test automation for JavaScript.
+#Without coding test, test automation for JavaScript.
 
 ##Principal use
 
 Regression test.
 This is effective when checking whether there are any other influences when a part is corrected. 
 
-##Not suitable
+##Not suitable use
 
 Test first.
 
@@ -91,5 +91,6 @@ git clone https://github.com/puriketu99/porky.git
 <script src="/porky/jquery.indexeddb.js"></script>
 <script src="/porky/porky.js"></script>
 ```
+
 
 About details,read docs/READ.md
