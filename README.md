@@ -57,9 +57,7 @@ Porky: 25ms
 ##Mechanism
 ###On register
 
-1.It saves the snapshot of html when you execute 'porky.register()'.
-
-If you specify json,it save the json.This is option.
+1.It saves the snapshot of html when you execute 'porky.register()'.If you specify json,it save the json.This is option.
 
 2.It executes the function specified.
 
@@ -85,6 +83,7 @@ Clone [https://github.com/puriketu99/porky](https://github.com/puriketu99/porky)
 ```sh:clone
 git clone https://github.com/puriketu99/porky.git
 ```
+
 
 ```html:import files
 <script src="/porky/jquery.js"></script>
