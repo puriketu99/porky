@@ -11,7 +11,7 @@ Test first.
 
 Test first development is often effective,but it is often a pain to write test code and fix it. 
 
-##Example:Register test
+##Register a test
 
 Let's think that we register a test for the following function.
 
