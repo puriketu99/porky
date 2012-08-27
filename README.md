@@ -1,44 +1,47 @@
-##コンセプト
+##Without Coding Test, test automation for JavaScript.
 
-テストを書かずにテストの自動化を実現する
+##Principal use
 
-##主な用途
+Regression test.
+This is effective when checking whether there are any other influences when a part is corrected. 
 
-リグレッションテスト
+##Not suitable
 
-一部を修正したときに他に影響がないかを確認するときに効果的です
+Test first.
 
-##向かない用途
-テストファーストによる開発
+Test first development is good,but it is often a pain to write test code and fix it. 
 
-##テストの登録
+##Example:Register test
 
-下記の関数をテストケースに登録する場合を考えます。
+The following 
 
-```coffeescript:テスト対象の関数
+Let's think that we register a test for the following function.
+
+```coffeescript:append
 append = function(){$("body").append("test case1");};
 ```
 
-javascriptコンソールから、下記を実行します。
+On JavaScript console in Google Chrome,execute as the following.
 
 ```javascript:console
 >porky.register({name:"test1",func:"append"})
 ```
 
-nameはテストの名称、funcは関数の名前です。
-これでテストの登録は完了です。
+'name' is name of test. 'func' is name of function.
 
-##テストの実行
+Registring test has been done.
 
-Chromeのjavascriptコンソールから下記を実行します。
+##Run tests
+
+On JavaScript console in Google Chrome,Run as the following.
 
 ```javascript:console
 >porky.run()
 ```
 
-pokry.runを実行すると、下記のようにテスト結果がconsole上に出力されます。
+When you execute pokry.run,print results of tests on the console.
 
-```yaml:結果
+```yaml:result
 Porky 
   Runner
   test1 
@@ -51,41 +54,43 @@ Porky: 25ms
 ```
 
 
-##仕組み
-###registerしたときにやっていること
+##Mechanism
+###On register
 
-1.registerした瞬間のhtmlを保存する。オプションで監視対象のjsonも指定している場合は、対象のjsonオブジェクトも保存。
+1.It saves the snapshot of html when you execute 'porky.register()'.
 
-2.指定された関数を実行する
+If you specify json,it save the json.This is option.
 
-3.1番と同様に、関数実行後のhtmlやjsonを保存する
+2.It executes the function specified.
 
-\#保存先は、ローカルのindexedDB
+3.As well As #1、it saves the snapshot after it executes.
 
-###runしたときにやっていること
+\#Saved data is saved in indexed db.
 
-テストケースごとに、下記を実行している
+###On run
 
-1.テストケースから、関数実行前のhtmlとjsonの状態を復元する
+By the test cases,It executes the following.
 
-2.関数を実行する
+1.It restores html and json to Saved data before executing the function. 
 
-3.関数実行後のhtmlとjsonの状態と、テストケースで保存されている関数実行後のhtmlとjsonを比較して、差がないかテストする
+2.It excutes the function.
+
+3.It compares row and saved data after executing the function.
 
 
-##導入
+##Getting started
 
-[https://github.com/puriketu99/porky](https://github.com/puriketu99/porky)からcloneして、必要なファイルを読み込む
+Clone [https://github.com/puriketu99/porky](https://github.com/puriketu99/porky) and import files.
 
 ```sh:clone
 git clone https://github.com/puriketu99/porky.git
 ```
 
-```html:必要なjavascriptファイルを読み込む
+```html:import files
 <script src="/porky/jquery.js"></script>
 <script src="/porky/indexeddb.shim.js"></script>
 <script src="/porky/jquery.indexeddb.js"></script>
 <script src="/porky/porky.js"></script>
 ```
 
-詳細は、docs/README.mdをご覧ください。
+About details,read docs/READ.md
