@@ -53,7 +53,7 @@ Porky: 25ms
 
 
 ##Mechanism
-###On register
+###about registering
 
 1.It saves the snapshot of html when you execute 'porky.register()'.If you specify json,it save the json.This is option.
 
@@ -63,7 +63,7 @@ Porky: 25ms
 
 \#Saved data is saved in indexed db.
 
-###On run
+###about running
 
 By the test cases,It executes the following.
 
