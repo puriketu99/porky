@@ -85,7 +85,7 @@ git clone https://github.com/puriketu99/porky.git
 ```
 
 
-```html:import files
+```html:importfiles
 <script src="/porky/jquery.js"></script>
 <script src="/porky/indexeddb.shim.js"></script>
 <script src="/porky/jquery.indexeddb.js"></script>
