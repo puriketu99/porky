@@ -1,54 +1,69 @@
-##目次
-* コンセプト
-* 概要
-* ライセンス
-* 導入
-* テストの登録
-* テストの実行
-* Ajax関数のテスト
-* JSONオブジェクトもテストに含める
-* 仕組み
-* 課題
+#Without coding test, test automation for JavaScript.
 
+##Contents
+* Summary
+* Principal use
+* Not suitable use
+* Lisence
+* Getting started
+* Register a test
+* Run tests
+* Set up a tested function with arguments
+* Test for ajax function
+* Observe JSON,in addition to html 
+* Mechanism
+* Contact
 
-##コンセプト
-テストを書かずに自動テストを実現する
+##Summary
 
-##概要
-ChromeのJavascript Console上で利用し、jsのテストケースを書かずに最低限のテストケースを作成し、実行することができます。
+Without coding test,porky helps that you automate testing for a function of Javascript. 
 
-テストケースをつくる際に必要な情報は、テストの名前とテストする関数です。
+##Principal use
 
-##ライセンス
+Regression test.
+
+When you change a part of cord, porky helps you check whether the change influences the other parts.
+
+##Not suitable use
+
+Test first.
+
+Test-driven development is often effective,but it is often painful to write a test and fix it.
+
+##Lisence
+
 Version: 0.1.0
+
 Author: puriketu99
+
 License: MIT license
 
-##導入
-[https://github.com/puriketu99/porky](https://github.com/puriketu99/porky)からcloneして、必要なファイルを読み込む
+##Getting started
+
+Clone [https://github.com/puriketu99/porky](https://github.com/puriketu99/porky) and import files.
 
 ```sh:clone
 git clone https://github.com/puriketu99/porky.git
 ```
 
-```html:必要なjavascriptファイルを読み込む
+```html:importfiles
 <script src="/porky/jquery.js"></script>
 <script src="/porky/indexeddb.shim.js"></script>
 <script src="/porky/jquery.indexeddb.js"></script>
 <script src="/porky/porky.js"></script>
 ```
 
-##テストの登録
+##Register a test
 
-下記の関数をテストケースに登録する場合を考えます。
+Let's think that we register a test for the following function.
 
-```coffeescript:テスト対象の関数
+```coffeescript:append
 append = function(){
   $("body").append("test case1");
 };
 ```
 
-Chromeのjavascriptコンソールから、下記を実行します。
+On JavaScript console in Google Chrome,execute as follows.
 
 ```javascript:console
 >porky.register({name:"test1",func:"append"})
@@ -57,28 +72,35 @@ Chromeのjavascriptコンソールから、下記を実行します。
 //Object
 ```
 
-これでテストの登録は完了です。
+'name' is the name of the test. 'func' is the name of the function.
 
-##テストの実行
+Registring test has been completed.
 
-Chromeのjavascriptコンソールから下記を実行します。
+##Run tests
 
-```
+On JavaScript console in Google Chrome,Run as follows.
+
+```javascript:console
 >porky.run()
-//Porky 
-//  Runner
-//  test1 
-//    UI test 
-//      success 
-//    JSON test 
-//      success 
-//  test1: 13ms 
-//Porky: 25ms 
-
 ```
-##引数を指定してテストを登録する
 
-下記のような関数に引数を渡すテストを登録する場合を考えます。
+When you execute pokry.run,print , the results of the tests will be output on the console.
+
+```yaml:result
+Porky 
+  Runner
+  test1 
+    UI test 
+      success 
+    JSON test 
+      success 
+  test1: 13ms 
+Porky: 25ms 
+```
+
+##Set up a tested function with arguments
+
+Let's think that we set up the folowing tested function with arguments.
 
 ```javascript:args
 destroy = function(name, father) {
@@ -87,9 +109,9 @@ destroy = function(name, father) {
 };
 ```
 
-コンソールから、下記のようにargに引数を指定して登録します。
+On JavaScript console in Google Chrome,set up a tested function with arguments as follows.
 
-```javascript:args引渡し
+```javascript:args
 >porky.register({
     name: "destroy test",
     func: "destroy",
@@ -98,9 +120,9 @@ destroy = function(name, father) {
 })
 ```
 
-##Ajaxを含むテストを登録する
+##Test for ajax function
 
-下記のような関数に引数を渡すテストを登録する場合を考えます。
+Let's think that we register a test for the following ajax function.
 
 ```javascript:ajax
 ajax = function() {
@@ -118,16 +140,17 @@ ajax = function() {
 };
 ```
 
-コンソールから、下記のようにis_ajaxにtrueを指定して登録します。
+On JavaScript console, set up 'is_ajax' with true as follows.
 
-```javascript:args引渡し
+```javascript:args
 >porky.register({
     name: "ajax test",
     func: "ajax",
     is_ajax: true
 })
 ```
-##JSONオブジェクトもテストに含める
+
+##Observe JSON,in addition to html 
 
 ```javascript:destroy
 destroy = function(name, father) {
@@ -136,9 +159,9 @@ destroy = function(name, father) {
 };
 ```
 
-コンソールから、下記のように監視したいオブジェクトのjsonのパスの文字列を配列形式で指定して登録します。
+As follows,on JavaScript console,set up 'json_paths' with the path of JSON you want to observe.
 
-```javascript:監視オブジェクト指定
+```javascript:observe_json
 >porky.register(destroy_test = {
     name: "destroy test",
     func: "destroy",
@@ -147,36 +170,34 @@ destroy = function(name, father) {
 })
 ```
 
-##仕組み
+##Mechanism
+###about registering
 
-###registerしたときにやっていること
+1.It saves the snapshot of html when you execute 'porky.register()'.If you specify json,it also saves the json.This is option.
 
-1.registerした瞬間のhtmlを保存する。オプションで監視対象のjsonも指定している場合は、対象のjsonオブジェクトも保存。
+2.It executes the specified function.
 
-2.指定された関数を実行する
+3.it also saves the snapshot of the html or the json after the function are executed in the same way as #1
 
-3.1番と同様に、関数実行後のhtmlやjsonを保存する
+\#the data is saved in the local indexed db.
 
-\#保存先は、ローカルのindexedDB
+###about running
 
-###runしたときにやっていること
+In each test case, It executes the following process.
 
-テストケースごとに、下記を実行している
+1.It restores html and json to Saved data before executing the function. 
 
-1.テストケースから、関数実行前のhtmlとjsonの状態を復元する
+2.It excutes the function.
 
-2.関数を実行する
+3.It compares the previous html and json with the present html and json and check whether there is the difference between them or not.
 
-3.関数実行後のhtmlとjsonの状態と、テストケースで保存されている関数実行後のhtmlとjsonを比較して、差がないかテストする
+##Contact
 
-##連絡先
-
-ぷりっぷりのおしり
+author:puriketu99
 
 puriketu.white at gmail dot com
 
 twitter:@puriketu99
 
-qiita:http://qiita.com/users/puriketu99
 
 
