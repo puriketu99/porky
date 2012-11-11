@@ -40,12 +40,12 @@ class porky.Db
           })
           fixture.createIndex "name"
   put:(data)->
-    $.indexedDB(DBNAME,SCHEMA).objectStore(TABLE)
-	    .put(data).then(
-		    ->
-          register_report(data)
-        report
-      )
+    obj = $.indexedDB(DBNAME,SCHEMA).objectStore(TABLE)
+    obj.put(data).then(
+          ->
+            register_report(data)
+          report
+        )
   get:(run)->
     list = []
     $.indexedDB(DBNAME,SCHEMA).objectStore(TABLE).index('name').each((e)->

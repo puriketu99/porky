@@ -70,7 +70,9 @@
     }
 
     Db.prototype.put = function(data) {
-      return $.indexedDB(DBNAME, SCHEMA).objectStore(TABLE).put(data).then(function() {
+      var obj;
+      obj = $.indexedDB(DBNAME, SCHEMA).objectStore(TABLE);
+      return obj.put(data).then(function() {
         return register_report(data);
       }, report);
     };
