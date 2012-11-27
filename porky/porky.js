@@ -182,6 +182,9 @@
             return register();
           }
         });
+        setTimeout(function() {
+          return register();
+        }, data.time_out ? data.time_out : 5000);
       }
       if (data.json_paths != null) {
         data.before_window = (function() {
@@ -417,6 +420,12 @@
             });
           }
         });
+        setTimeout(function() {
+          return judge({
+            "fixture": fixture,
+            "dfd": dfd
+          });
+        }, fixture.time_out ? fixture.time_out : 5000);
       }
       eval_code = "" + fixture.func + ".apply(fixture.obj,fixture.arg)";
       eval(eval_code);

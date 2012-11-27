@@ -100,6 +100,9 @@ class porky.Register
       data[field] = value
     if data.is_ajax 
       $.ajaxSetup {complete:->register()}
+      setTimeout(
+        ->register(),
+        if data.time_out then data.time_out else 5000)
     if data.json_paths?
       data.before_window = (f2s obj for obj in data.json_paths)
     data.before_html = document.getElementsByTagName("html")[0].innerHTML
@@ -240,6 +243,9 @@ class porky.Runner
         "fixture":fixture
         "dfd":dfd
       )}
+      setTimeout(
+        ->judge({"fixture":fixture,"dfd":dfd}),
+        if fixture.time_out then fixture.time_out else 5000)
     eval_code = "#{fixture.func}.apply(fixture.obj,fixture.arg)"
     eval eval_code
     if !fixture.is_ajax? or !fixture.is_ajax 
