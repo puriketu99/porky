@@ -198,6 +198,14 @@ class porky.Runner
     return flag
 
   judge = (arg)->
+    console.group 'Fixture'
+    fixture = 
+      func:arg.fixture.func
+      arg:arg.fixture.arg
+      is_ajax:arg.fixture.is_ajax
+      time_out:arg.fixture.time_out
+    console.log fixture
+    console.groupEnd 'Fixture'
     console.group 'UI test'
     if arg.fixture.after_html is document.getElementsByTagName("html")[0].innerHTML
       console.log 'success'

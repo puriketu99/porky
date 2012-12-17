@@ -351,7 +351,16 @@
     };
 
     judge = function(arg) {
-      var flags, i, path;
+      var fixture, flags, i, path;
+      console.group('Fixture');
+      fixture = {
+        func: arg.fixture.func,
+        arg: arg.fixture.arg,
+        is_ajax: arg.fixture.is_ajax,
+        time_out: arg.fixture.time_out
+      };
+      console.log(fixture);
+      console.groupEnd('Fixture');
       console.group('UI test');
       if (arg.fixture.after_html === document.getElementsByTagName("html")[0].innerHTML) {
         console.log('success');
