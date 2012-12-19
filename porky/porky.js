@@ -77,6 +77,10 @@
       }, report);
     };
 
+    Db.prototype.find = function(name) {
+      return $.indexedDB(DBNAME, SCHEMA).objectStore(TABLE).get(name);
+    };
+
     Db.prototype.get = function(run) {
       var list;
       list = [];
@@ -209,6 +213,25 @@
     }
 
     return Register;
+
+  })();
+
+  porky.Reregister = (function() {
+    var DBNAME, TABLE;
+
+    Reregister.name = 'Reregister';
+
+    DBNAME = 'PORKY';
+
+    TABLE = 'fixtures';
+
+    function Reregister(name) {
+      (new porky.Db(DBNAME, TABLE)).find(name).done(function(fixture) {
+        return new porky.Register(fixture);
+      });
+    }
+
+    return Reregister;
 
   })();
 
@@ -477,6 +500,10 @@
 
   porky.register = function(fixture) {
     return new porky.Register(fixture);
+  };
+
+  porky.reregister = function(name) {
+    return new porky.Reregister(name);
   };
 
   porky.run = function() {

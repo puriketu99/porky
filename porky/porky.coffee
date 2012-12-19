@@ -46,6 +46,9 @@ class porky.Db
             register_report(data)
           report
         )
+  find:(name)->
+    $.indexedDB(DBNAME,SCHEMA).objectStore(TABLE).get(name)
+
   get:(run)->
     list = []
     $.indexedDB(DBNAME,SCHEMA).objectStore(TABLE).index('name').each((e)->
@@ -110,6 +113,13 @@ class porky.Register
     eval eval_code
     if !data.is_ajax 
       do->register()
+
+class porky.Reregister
+  DBNAME = 'PORKY'
+  TABLE = 'fixtures'
+  constructor:(name)->
+    (new porky.Db(DBNAME,TABLE)).find(name)
+      .done((fixture)->new porky.Register(fixture))
 
 class porky.Runner
   DBNAME = 'PORKY'
@@ -275,5 +285,6 @@ class porky.Deleter
 
 
 porky.register = (fixture)->(new porky.Register(fixture))
+porky.reregister = (name)->(new porky.Reregister(name))
 porky.run = ()->(new porky.Runner())
 porky.delete = (key)->(new porky.Deleter(key))
