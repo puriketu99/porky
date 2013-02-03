@@ -38,3 +38,6 @@ window.eric =
     mother:
       name:'mary'
       company:'horizon'
+window.change = ->
+  $("#tryit").html("Done")
+

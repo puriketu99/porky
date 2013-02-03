@@ -63,4 +63,8 @@
     }
   };
 
+  window.change = function() {
+    return $("#tryit").html("Done");
+  };
+
 }).call(this);

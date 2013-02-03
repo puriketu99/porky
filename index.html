@@ -9,6 +9,8 @@
 
     <!-- Le styles -->
     <link href="static/css/main.css" rel="stylesheet">
+    <script src="static/src/prettify.js" type="text/javascript"></script>
+    <link href="static/src/prettify.css" rel="stylesheet">
     <link href="bootstrap/docs/assets/css/bootstrap.css" rel="stylesheet">
     <style>
       body {
@@ -29,22 +31,122 @@
     <link rel="apple-touch-icon-precomposed" href="bootstrap/docs/assets/ico/apple-touch-icon-57-precomposed.png">
   </head>
 
-  <body>
+  <body onload="prettyPrint();">
     <div class="container">
-      <div class="row">
-        <div id="twitter_wrapper" class="span6 offset3 well">
-            <div id="items_wrapper" class="row">
-              <div class="span6 tweet line">
-               <h2>
-                 Porky <small>Minch</small>
-               </h2>
-             </div>
+      <div class="row-fluid">
+        <h1>Porky</h1><h3>Without coding test, test automation for JavaScript.</h3>
+        <br />
+
+        <section class="">
+          <page-header>
+            <h2>Principal use</h2>
+            <br />
+            
+          </page-header>
+          <div class="row-fluid">
+            <div id="gettingstarted" class="span12">
+Regression test.
+            <br />
+When you change a part of cord, porky helps you check whether the change influences the other parts.
             </div>
-            <div id="tests_wrapper" class="row">
-              <div id="tests" class="span6">
-              </div>
+          </div>
+          <br />
+        </section>
+
+        <section class="">
+          <page-header>
+            <h2>Not suitable use</h2>
+            <br />
+          </page-header>
+          <div class="row-fluid">
+            <div id="gettingstarted" class="span12">
+Test first.
+            <br />
+Test-driven development is often effective,but it is often painful to write a test and fix it.
             </div>
-        </div>
+          </div>
+          <br />
+        </section>
+
+        <section class="">
+          <page-header>
+            <h2>Try it now </h2>
+            <br />
+          </page-header>
+          <div class="row-fluid">
+            <div id="gettingstarted" class="span12">
+Let's think that we register a test for the following function.
+            <br />
+            <br />
+            <div class="well">
+              <div id="tryit" class="btn btn-success" onclick="change()">Change</div>
+            </div>
+            <div>
+            <pre class="prettyprint linenums">
+window.change = ->
+  $("#tryit").html("Done") </pre>
+            <h3>1.Register a test</h3>
+          <br />
+On JavaScript console in Google Chrome,register as follows.
+            <pre class="prettyprint"> >porky.register({name:"first test",func:"change"}) </pre>
+            <h3>2.Run tests</h3>
+          <br />
+On JavaScript console in Google Chrome,run as follows.
+            <pre class="prettyprint"> >porky.run() </pre>
+When you execute pokry.run,print , the results of the tests will be output on the console.
+            <pre class="prettyprint linenums">
+Porky 
+  Runner
+    first test 
+    UI test 
+      success 
+    JSON test 
+      success 
+  test1: 13ms 
+Porky: 25ms </pre>
+            <h3>3.Change function</h3>
+          <br />
+On JavaScript console in Google Chrome,type follows.
+            <pre class="prettyprint"> change = function(){} </pre>
+            <h3>4.Run tests</h3>
+          <br />
+On JavaScript console in Google Chrome,run as follows.
+            <pre class="prettyprint"> >porky.run() </pre>
+When you execute pokry.run,print , the results of the tests will be output on the console.
+            <pre class="prettyprint linenums">
+Porky 
+  Runner
+    first test 
+    UI test 
+      ui fail<--failed
+    JSON test 
+      success 
+  test1: 13ms 
+Porky: 25ms </pre>
+            </div>
+            </div>
+          </div>
+          <br />
+        </section>
+        <section class="">
+          <page-header>
+            <h2>Getting started</h2>
+            <br />
+            
+          </page-header>
+          <div class="row-fluid">
+            <div id="gettingstarted" class="span12">
+Clone https://github.com/puriketu99/porky and import files.
+            <br />
+<pre class="prettyprint">git clone https://github.com/puriketu99/porky.git</pre>
+              <pre class="prettyprint linenums">
+jquery.js
+indexeddb.shim.js
+jquery.indexeddb.js
+porky.js </pre>
+            </div>
+          </div>
+        </section>
         <div id="copy_right" class="span6 offset3">
           &copy; @puriketu99
         </div>
@@ -76,5 +178,6 @@
     <!-- sample -->
     <script src="func.js" type="text/javascript"></script>
   </body>
+        
 </html>
 
