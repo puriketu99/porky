@@ -12,6 +12,10 @@ Test first.
 
 Test-driven development is often effective,but it is often painful to write a test and fix it.
 
+##DEMO
+
+http://porky-demo.herokuapp.com/
+
 ##Register a test
 
 Let's think that we register a test for the following function.
