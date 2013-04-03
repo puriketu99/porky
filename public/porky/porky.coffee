@@ -90,28 +90,28 @@ class porky.Register
           return that
         else help_obj
     helper(main_obj,obj_path)
-  data = 
+  register_fixture = 
     obj:null
     arg:[]
   register = ()->
-    data.after_html = document.getElementsByTagName("html")[0].innerHTML
-    if data.json_paths?
-      data.after_window = (f2s obj for obj in data.json_paths) 
-    (new porky.Db(DBNAME,TABLE)).put data
+    register_fixture.after_html = document.getElementsByTagName("html")[0].innerHTML
+    if register_fixture.json_paths?
+      register_fixture.after_window = (f2s obj for obj in register_fixture.json_paths) 
+    (new porky.Db(DBNAME,TABLE)).put register_fixture
   constructor:(register_data)->
     for field,value of register_data
-      data[field] = value
-    if data.is_ajax 
+      register_fixture[field] = value
+    if register_fixture.time_out 
       $.ajaxSetup {complete:->register()}
       setTimeout(
         ->register(),
-        if data.time_out then data.time_out else 5000)
-    if data.json_paths?
-      data.before_window = (f2s obj for obj in data.json_paths)
-    data.before_html = document.getElementsByTagName("html")[0].innerHTML
-    eval_code = "#{data.func}.apply(data.obj,data.arg)"
+        register_fixture.time_out)
+    if register_fixture.json_paths?
+      register_fixture.before_window = (f2s obj for obj in register_fixture.json_paths)
+    register_fixture.before_html = document.getElementsByTagName("html")[0].innerHTML
+    eval_code = "#{register_fixture.func}.apply(register_fixture.obj,register_fixture.arg)"
     eval eval_code
-    if !data.is_ajax 
+    if !register_fixture.time_out 
       do->register()
 
 class porky.Reregister
@@ -209,12 +209,7 @@ class porky.Runner
 
   judge = (arg)->
     console.group 'Fixture'
-    fixture = 
-      func:arg.fixture.func
-      arg:arg.fixture.arg
-      is_ajax:arg.fixture.is_ajax
-      time_out:arg.fixture.time_out
-    console.log fixture
+    console.log arg.fixture
     console.groupEnd 'Fixture'
     console.group 'UI test'
     if arg.fixture.after_html is document.getElementsByTagName("html")[0].innerHTML
@@ -256,17 +251,17 @@ class porky.Runner
         console.groupEnd 'Porky'
         return 'test error'
     )
-    if fixture.is_ajax 
+    if fixture.time_out 
       $.ajaxSetup {complete:->judge(
         "fixture":fixture
         "dfd":dfd
       )}
       setTimeout(
         ->judge({"fixture":fixture,"dfd":dfd}),
-        if fixture.time_out then fixture.time_out else 5000)
+        fixture.time_out)
     eval_code = "#{fixture.func}.apply(fixture.obj,fixture.arg)"
     eval eval_code
-    if !fixture.is_ajax? or !fixture.is_ajax 
+    if !fixture.time_out 
       do->judge(
         'fixture':fixture
         'dfd':dfd

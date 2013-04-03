@@ -100,7 +100,7 @@
   })();
 
   porky.Register = (function() {
-    var DBNAME, TABLE, data, f2s, register;
+    var DBNAME, TABLE, f2s, register, register_fixture;
 
     Register.name = 'Register';
 
@@ -151,18 +151,18 @@
       return helper(main_obj, obj_path);
     };
 
-    data = {
+    register_fixture = {
       obj: null,
       arg: []
     };
 
     register = function() {
       var obj;
-      data.after_html = document.getElementsByTagName("html")[0].innerHTML;
-      if (data.json_paths != null) {
-        data.after_window = (function() {
+      register_fixture.after_html = document.getElementsByTagName("html")[0].innerHTML;
+      if (register_fixture.json_paths != null) {
+        register_fixture.after_window = (function() {
           var _i, _len, _ref, _results;
-          _ref = data.json_paths;
+          _ref = register_fixture.json_paths;
           _results = [];
           for (_i = 0, _len = _ref.length; _i < _len; _i++) {
             obj = _ref[_i];
@@ -171,16 +171,16 @@
           return _results;
         })();
       }
-      return (new porky.Db(DBNAME, TABLE)).put(data);
+      return (new porky.Db(DBNAME, TABLE)).put(register_fixture);
     };
 
     function Register(register_data) {
       var eval_code, field, obj, value;
       for (field in register_data) {
         value = register_data[field];
-        data[field] = value;
+        register_fixture[field] = value;
       }
-      if (data.is_ajax) {
+      if (register_fixture.time_out) {
         $.ajaxSetup({
           complete: function() {
             return register();
@@ -188,12 +188,12 @@
         });
         setTimeout(function() {
           return register();
-        }, data.time_out ? data.time_out : 5000);
+        }, register_fixture.time_out);
       }
-      if (data.json_paths != null) {
-        data.before_window = (function() {
+      if (register_fixture.json_paths != null) {
+        register_fixture.before_window = (function() {
           var _i, _len, _ref, _results;
-          _ref = data.json_paths;
+          _ref = register_fixture.json_paths;
           _results = [];
           for (_i = 0, _len = _ref.length; _i < _len; _i++) {
             obj = _ref[_i];
@@ -202,10 +202,10 @@
           return _results;
         })();
       }
-      data.before_html = document.getElementsByTagName("html")[0].innerHTML;
-      eval_code = "" + data.func + ".apply(data.obj,data.arg)";
+      register_fixture.before_html = document.getElementsByTagName("html")[0].innerHTML;
+      eval_code = "" + register_fixture.func + ".apply(register_fixture.obj,register_fixture.arg)";
       eval(eval_code);
-      if (!data.is_ajax) {
+      if (!register_fixture.time_out) {
         (function() {
           return register();
         })();
@@ -374,15 +374,9 @@
     };
 
     judge = function(arg) {
-      var fixture, flags, i, path;
+      var flags, i, path;
       console.group('Fixture');
-      fixture = {
-        func: arg.fixture.func,
-        arg: arg.fixture.arg,
-        is_ajax: arg.fixture.is_ajax,
-        time_out: arg.fixture.time_out
-      };
-      console.log(fixture);
+      console.log(arg.fixture);
       console.groupEnd('Fixture');
       console.group('UI test');
       if (arg.fixture.after_html === document.getElementsByTagName("html")[0].innerHTML) {
@@ -443,7 +437,7 @@
         console.groupEnd('Porky');
         return 'test error';
       });
-      if (fixture.is_ajax) {
+      if (fixture.time_out) {
         $.ajaxSetup({
           complete: function() {
             return judge({
@@ -457,11 +451,11 @@
             "fixture": fixture,
             "dfd": dfd
           });
-        }, fixture.time_out ? fixture.time_out : 5000);
+        }, fixture.time_out);
       }
       eval_code = "" + fixture.func + ".apply(fixture.obj,fixture.arg)";
       eval(eval_code);
-      if (!(fixture.is_ajax != null) || !fixture.is_ajax) {
+      if (!fixture.time_out) {
         return (function() {
           return judge({
             'fixture': fixture,
