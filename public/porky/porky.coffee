@@ -101,17 +101,19 @@ class porky.Register
   constructor:(register_data)->
     for field,value of register_data
       register_fixture[field] = value
-    if register_fixture.time_out 
+    if register_fixture.delay 
       $.ajaxSetup {complete:->register()}
       setTimeout(
         ->register(),
-        register_fixture.time_out)
+        register_fixture.delay)
+    else
+      register_fixture.delay = 0
     if register_fixture.json_paths?
       register_fixture.before_window = (f2s obj for obj in register_fixture.json_paths)
     register_fixture.before_html = document.getElementsByTagName("html")[0].innerHTML
     eval_code = "#{register_fixture.func}.apply(register_fixture.obj,register_fixture.arg)"
     eval eval_code
-    if !register_fixture.time_out 
+    if !register_fixture.delay 
       do->register()
 
 class porky.Reregister
@@ -225,6 +227,7 @@ class porky.Runner
     if false not in flags
       console.log 'success'
     console.groupEnd 'JSON test'
+    console.log "Delay: #{arg.fixture.delay}ms"
     console.timeEnd arg.fixture.name
     console.groupEnd arg.fixture.name
     arg.dfd.resolve()
@@ -251,21 +254,16 @@ class porky.Runner
         console.groupEnd 'Porky'
         return 'test error'
     )
-    if fixture.time_out 
+    if fixture.delay 
       $.ajaxSetup {complete:->judge(
         "fixture":fixture
         "dfd":dfd
       )}
       setTimeout(
         ->judge({"fixture":fixture,"dfd":dfd}),
-        fixture.time_out)
+        fixture.delay)
     eval_code = "#{fixture.func}.apply(fixture.obj,fixture.arg)"
     eval eval_code
-    if !fixture.time_out 
-      do->judge(
-        'fixture':fixture
-        'dfd':dfd
-      )
 
   constructor:()->
     console.group 'Porky'

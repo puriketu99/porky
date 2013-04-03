@@ -180,7 +180,7 @@
         value = register_data[field];
         register_fixture[field] = value;
       }
-      if (register_fixture.time_out) {
+      if (register_fixture.delay) {
         $.ajaxSetup({
           complete: function() {
             return register();
@@ -188,7 +188,9 @@
         });
         setTimeout(function() {
           return register();
-        }, register_fixture.time_out);
+        }, register_fixture.delay);
+      } else {
+        register_fixture.delay = 0;
       }
       if (register_fixture.json_paths != null) {
         register_fixture.before_window = (function() {
@@ -205,7 +207,7 @@
       register_fixture.before_html = document.getElementsByTagName("html")[0].innerHTML;
       eval_code = "" + register_fixture.func + ".apply(register_fixture.obj,register_fixture.arg)";
       eval(eval_code);
-      if (!register_fixture.time_out) {
+      if (!register_fixture.delay) {
         (function() {
           return register();
         })();
@@ -404,6 +406,7 @@
         console.log('success');
       }
       console.groupEnd('JSON test');
+      console.log("Delay: " + arg.fixture.delay + "ms");
       console.timeEnd(arg.fixture.name);
       console.groupEnd(arg.fixture.name);
       arg.dfd.resolve();
@@ -437,7 +440,7 @@
         console.groupEnd('Porky');
         return 'test error';
       });
-      if (fixture.time_out) {
+      if (fixture.delay) {
         $.ajaxSetup({
           complete: function() {
             return judge({
@@ -451,18 +454,10 @@
             "fixture": fixture,
             "dfd": dfd
           });
-        }, fixture.time_out);
+        }, fixture.delay);
       }
       eval_code = "" + fixture.func + ".apply(fixture.obj,fixture.arg)";
-      eval(eval_code);
-      if (!fixture.time_out) {
-        return (function() {
-          return judge({
-            'fixture': fixture,
-            'dfd': dfd
-          });
-        })();
-      }
+      return eval(eval_code);
     };
 
     function Runner() {
