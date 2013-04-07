@@ -61,7 +61,7 @@ class porky.Register
     native_func = /(return)? *function .*\(.*\) {\n? +\[?native (function)?/
     avoid_objects = ["window['performance']","window['event']","window['console']","window['document']","window['history']","window['clientInformation']","window['navigator']","window['$']","window['Audio']","window['Image']","window['Option']"]
     helper = (help_obj,path)->
-      switch true
+      switch 
         when help_obj is null
           help_obj
         when typeof help_obj is 'function'
@@ -134,7 +134,7 @@ class porky.Runner
     helper = (help_db,path)->
       if path is "window['Audio']"
         console.log "path"
-      switch true
+      switch 
         when help_db instanceof Array
           for v in help_db
             helper(v,"#{path}[#{_i}]")
@@ -168,7 +168,7 @@ class porky.Runner
     flag = true
     helper = (help_db,path)->
       help_window = eval(path)
-      switch true
+      switch 
         when help_db is null
           if help_window isnt null
             inner_fail(help_db,help_window,path)

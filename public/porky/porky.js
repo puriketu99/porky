@@ -101,14 +101,14 @@
       avoid_objects = ["window['performance']", "window['event']", "window['console']", "window['document']", "window['history']", "window['clientInformation']", "window['navigator']", "window['$']", "window['Audio']", "window['Image']", "window['Option']"];
       helper = function(help_obj, path) {
         var i, key, that, v, value, _ref;
-        switch (true) {
-          case help_obj === null:
+        switch (false) {
+          case help_obj !== null:
             return help_obj;
-          case typeof help_obj === 'function':
+          case typeof help_obj !== 'function':
             return "(function(){return " + (String(help_obj)) + "})()";
-          case __indexOf.call(flags, help_obj) >= 0:
+          case __indexOf.call(flags, help_obj) < 0:
             return "(function(){return " + path + "})()";
-          case help_obj instanceof Array:
+          case !(help_obj instanceof Array):
             flags.push(help_obj);
             return (function() {
               var _i, _len, _results;
@@ -119,7 +119,7 @@
               }
               return _results;
             })();
-          case typeof help_obj === "object":
+          case typeof help_obj !== "object":
             flags.push(help_obj);
             that = {};
             for (key in help_obj) {
@@ -263,20 +263,20 @@
         if (path === "window['Audio']") {
           console.log("path");
         }
-        switch (true) {
-          case help_db instanceof Array:
+        switch (false) {
+          case !(help_db instanceof Array):
             for (_i = 0, _len = help_db.length; _i < _len; _i++) {
               v = help_db[_i];
               helper(v, "" + path + "[" + _i + "]");
             }
             break;
-          case typeof help_db === "object":
+          case typeof help_db !== "object":
             for (key in help_db) {
               value = help_db[key];
               helper(help_db[key], "" + path + "['" + key + "']");
             }
             break;
-          case typeof help_db === 'string' && help_db.match(func_pattern) !== null:
+          case !(typeof help_db === 'string' && help_db.match(func_pattern) !== null):
             setw(path, eval(help_db));
             break;
           default:
@@ -311,13 +311,13 @@
       helper = function(help_db, path) {
         var evaled_func, evaled_obj, help_window, i, key, v, value, window_func, _i, _len;
         help_window = eval(path);
-        switch (true) {
-          case help_db === null:
+        switch (false) {
+          case help_db !== null:
             if (help_window !== null) {
               inner_fail(help_db, help_window, path);
             }
             break;
-          case help_db instanceof Array:
+          case !(help_db instanceof Array):
             if (help_db.length !== help_window.length || not_same_type(help_db, help_window)) {
               inner_fail(help_db, help_window);
             } else {
@@ -327,13 +327,13 @@
               }
             }
             break;
-          case typeof help_window === 'object' && typeof help_db === 'string' && help_db.match(func_pattern) !== null:
+          case !(typeof help_window === 'object' && typeof help_db === 'string' && help_db.match(func_pattern) !== null):
             evaled_obj = eval(help_db);
             if (evaled_obj !== help_window) {
               inner_fail(evaled_obj, help_window, path);
             }
             break;
-          case typeof help_db === "object":
+          case typeof help_db !== "object":
             if (not_same_type(help_db, help_window)) {
               inner_fail(help_db, help_window, path);
             } else {
@@ -343,7 +343,7 @@
               }
             }
             break;
-          case typeof help_window === 'function':
+          case typeof help_window !== 'function':
             window_func = "(function(){return " + (String(help_window)) + "})()";
             if (help_db !== window_func) {
               evaled_func = eval(help_db);
