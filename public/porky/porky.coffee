@@ -1,17 +1,7 @@
-window.indexedDB = window.indexedDB || window.webkitIndexedDB || window.mozIndexedDB || window.msIndexedDB;
-window.IDBTransaction = window.IDBTransaction || window.webkitIDBTransaction || window.msIDBTransaction;
-window.IDBKeyRange = window.IDBKeyRange|| window.webkitIDBKeyRange || window.msIDBKeyRange;
-window.IDBCursor = window.IDBCursor || window.webkitIDBCursor || window.msIDBCursor;
-Function.prototype.method = (name,func)->
-  this.prototype[name] = func
-  this
-
-Function.method 'curry',()->
-  slice = Array.prototype.slice
-  args = slice.apply arguments
-  that = this
-  return ()->
-    that.apply null,args.concat slice.apply arguments
+window.indexedDB = window.indexedDB || window.webkitIndexedDB || window.mozIndexedDB || window.msIndexedDB
+window.IDBTransaction = window.IDBTransaction || window.webkitIDBTransaction || window.msIDBTransaction
+window.IDBKeyRange = window.IDBKeyRange|| window.webkitIDBKeyRange || window.msIDBKeyRange
+window.IDBCursor = window.IDBCursor || window.webkitIDBCursor || window.msIDBCursor
 
 window.porky = {}
 class porky.Db
