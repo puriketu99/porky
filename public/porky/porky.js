@@ -165,18 +165,6 @@
         value = register_data[field];
         register_fixture[field] = value;
       }
-      if (register_fixture.delay) {
-        $.ajaxSetup({
-          complete: function() {
-            return register();
-          }
-        });
-        setTimeout(function() {
-          return register();
-        }, register_fixture.delay);
-      } else {
-        register_fixture.delay = 0;
-      }
       if (register_fixture.json_paths != null) {
         register_fixture.before_window = (function() {
           var _i, _len, _ref, _results;
@@ -192,11 +180,10 @@
       register_fixture.before_html = document.getElementsByTagName("html")[0].innerHTML;
       eval_code = "" + register_fixture.func + ".apply(register_fixture.obj,register_fixture.arg)";
       eval(eval_code);
-      if (!register_fixture.delay) {
-        (function() {
-          return register();
-        })();
-      }
+      register_fixture.delay = register_fixture.delay || 0;
+      setTimeout(function() {
+        return register();
+      }, register_fixture.delay);
     }
 
     return Register;
@@ -425,24 +412,14 @@
         console.groupEnd('Porky');
         return 'test error';
       });
-      if (fixture.delay) {
-        $.ajaxSetup({
-          complete: function() {
-            return judge({
-              "fixture": fixture,
-              "dfd": dfd
-            });
-          }
-        });
-        setTimeout(function() {
-          return judge({
-            "fixture": fixture,
-            "dfd": dfd
-          });
-        }, fixture.delay);
-      }
       eval_code = "" + fixture.func + ".apply(fixture.obj,fixture.arg)";
-      return eval(eval_code);
+      eval(eval_code);
+      return setTimeout(function() {
+        return judge({
+          "fixture": fixture,
+          "dfd": dfd
+        });
+      }, fixture.delay);
     };
 
     function Runner() {

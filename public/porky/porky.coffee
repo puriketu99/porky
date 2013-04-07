@@ -91,20 +91,15 @@ class porky.Register
   constructor:(register_data)->
     for field,value of register_data
       register_fixture[field] = value
-    if register_fixture.delay 
-      $.ajaxSetup {complete:->register()}
-      setTimeout(
-        ->register(),
-        register_fixture.delay)
-    else
-      register_fixture.delay = 0
     if register_fixture.json_paths?
       register_fixture.before_window = (f2s obj for obj in register_fixture.json_paths)
     register_fixture.before_html = document.getElementsByTagName("html")[0].innerHTML
     eval_code = "#{register_fixture.func}.apply(register_fixture.obj,register_fixture.arg)"
     eval eval_code
-    if !register_fixture.delay 
-      do->register()
+    register_fixture.delay =  register_fixture.delay || 0
+    setTimeout(
+      ->register(),
+      register_fixture.delay)
 
 class porky.Reregister
   DBNAME = 'PORKY'
@@ -244,16 +239,11 @@ class porky.Runner
         console.groupEnd 'Porky'
         return 'test error'
     )
-    if fixture.delay 
-      $.ajaxSetup {complete:->judge(
-        "fixture":fixture
-        "dfd":dfd
-      )}
-      setTimeout(
-        ->judge({"fixture":fixture,"dfd":dfd}),
-        fixture.delay)
     eval_code = "#{fixture.func}.apply(fixture.obj,fixture.arg)"
     eval eval_code
+    setTimeout(
+      ->judge({"fixture":fixture,"dfd":dfd}),
+      fixture.delay)
 
   constructor:()->
     console.group 'Porky'
