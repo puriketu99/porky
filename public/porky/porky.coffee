@@ -55,9 +55,9 @@ class porky.Db
 class porky.Register
   DBNAME = 'PORKY'
   TABLE = 'fixtures'
-  f2s = (obj_path)->
+  register_f2s = (obj_path)->
     main_obj = eval(obj_path)
-    flags= []
+    register_fixture.checked_objects = []
     native_func = /(return)? *function .*\(.*\) {\n? +\[?native (function)?/
     avoid_objects = ["window['performance']","window['event']","window['console']","window['document']","window['history']","window['clientInformation']","window['navigator']","window['$']","window['Audio']","window['Image']","window['Option']"]
     helper = (help_obj,path)->
@@ -66,13 +66,13 @@ class porky.Register
           help_obj
         when typeof help_obj is 'function'
           "(function(){return #{String(help_obj)}})()"
-        when help_obj in flags
+        when help_obj in register_fixture.checked_objects
           "(function(){return #{path}})()"
         when help_obj instanceof Array
-          flags.push help_obj
+          register_fixture.checked_objects.push help_obj
           return (helper v,"#{path}[#{i}]" for v,i in help_obj)
         when typeof help_obj is "object"
-          flags.push help_obj
+          register_fixture.checked_objects.push help_obj
           that = {}
           for key,value of help_obj
             if !(String(value).match native_func) and "#{path}['#{key}']" not in avoid_objects and key isnt 'enabledPlugin' 
@@ -86,13 +86,13 @@ class porky.Register
   register = ()->
     register_fixture.after_html = document.getElementsByTagName("html")[0].innerHTML
     if register_fixture.json_paths?
-      register_fixture.after_window = (f2s obj for obj in register_fixture.json_paths) 
+      register_fixture.after_window = (register_f2s obj for obj in register_fixture.json_paths) 
     (new porky.Db(DBNAME,TABLE)).put register_fixture
   constructor:(register_data)->
     for field,value of register_data
       register_fixture[field] = value
     if register_fixture.json_paths?
-      register_fixture.before_window = (f2s obj for obj in register_fixture.json_paths)
+      register_fixture.before_window = (register_f2s obj for obj in register_fixture.json_paths)
     register_fixture.before_html = document.getElementsByTagName("html")[0].innerHTML
     eval_code = "#{register_fixture.func}.apply(register_fixture.obj,register_fixture.arg)"
     eval eval_code
@@ -173,9 +173,9 @@ class porky.Runner
           else
             (helper help_db[i],"#{path}[#{i}]" for v,i in help_window)
         when typeof help_window is 'object' and typeof help_db is 'string' and help_db.match(func_pattern) isnt null
-            evaled_obj = eval(help_db)
-            if evaled_obj isnt help_window
-              inner_fail(evaled_obj,help_window,path)
+          evaled_obj = eval(help_db)
+          if evaled_obj isnt help_window
+            inner_fail(evaled_obj,help_window,path)
         when typeof help_db is "object"
           if not_same_type(help_db,help_window)
             inner_fail(help_db,help_window,path)

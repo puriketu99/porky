@@ -16,6 +16,7 @@ window.eric =
     mother:
       name:'mary'
       company:'horizon'
+window.eric.self = window.eric
 
 window.destroy = (name,father)-> 
   eric.name = name

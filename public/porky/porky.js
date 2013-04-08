@@ -85,7 +85,7 @@
   })();
 
   porky.Register = (function() {
-    var DBNAME, TABLE, f2s, register, register_fixture;
+    var DBNAME, TABLE, register, register_f2s, register_fixture;
 
     Register.name = 'Register';
 
@@ -93,10 +93,10 @@
 
     TABLE = 'fixtures';
 
-    f2s = function(obj_path) {
-      var avoid_objects, flags, helper, main_obj, native_func;
+    register_f2s = function(obj_path) {
+      var avoid_objects, helper, main_obj, native_func;
       main_obj = eval(obj_path);
-      flags = [];
+      register_fixture.checked_objects = [];
       native_func = /(return)? *function .*\(.*\) {\n? +\[?native (function)?/;
       avoid_objects = ["window['performance']", "window['event']", "window['console']", "window['document']", "window['history']", "window['clientInformation']", "window['navigator']", "window['$']", "window['Audio']", "window['Image']", "window['Option']"];
       helper = function(help_obj, path) {
@@ -106,10 +106,10 @@
             return help_obj;
           case typeof help_obj !== 'function':
             return "(function(){return " + (String(help_obj)) + "})()";
-          case __indexOf.call(flags, help_obj) < 0:
+          case __indexOf.call(register_fixture.checked_objects, help_obj) < 0:
             return "(function(){return " + path + "})()";
           case !(help_obj instanceof Array):
-            flags.push(help_obj);
+            register_fixture.checked_objects.push(help_obj);
             return (function() {
               var _i, _len, _results;
               _results = [];
@@ -120,7 +120,7 @@
               return _results;
             })();
           case typeof help_obj !== "object":
-            flags.push(help_obj);
+            register_fixture.checked_objects.push(help_obj);
             that = {};
             for (key in help_obj) {
               value = help_obj[key];
@@ -151,7 +151,7 @@
           _results = [];
           for (_i = 0, _len = _ref.length; _i < _len; _i++) {
             obj = _ref[_i];
-            _results.push(f2s(obj));
+            _results.push(register_f2s(obj));
           }
           return _results;
         })();
@@ -172,7 +172,7 @@
           _results = [];
           for (_i = 0, _len = _ref.length; _i < _len; _i++) {
             obj = _ref[_i];
-            _results.push(f2s(obj));
+            _results.push(register_f2s(obj));
           }
           return _results;
         })();

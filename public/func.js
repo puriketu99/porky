@@ -29,6 +29,8 @@
     }
   };
 
+  window.eric.self = window.eric;
+
   window.destroy = function(name, father) {
     eric.name = name;
     return eric.family.father.name = father;
