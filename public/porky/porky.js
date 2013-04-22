@@ -94,9 +94,10 @@
     TABLE = 'fixtures';
 
     register_f2s = function(obj_path) {
-      var avoid_objects, helper, main_obj, native_func;
+      var avoid_objects, checked_paths, helper, main_obj, native_func;
       main_obj = eval(obj_path);
       register_fixture.checked_objects = [];
+      checked_paths = [];
       native_func = /(return)? *function .*\(.*\) {\n? +\[?native (function)?/;
       avoid_objects = ["window['performance']", "window['event']", "window['console']", "window['document']", "window['history']", "window['clientInformation']", "window['navigator']", "window['$']", "window['Audio']", "window['Image']", "window['Option']"];
       helper = function(help_obj, path) {

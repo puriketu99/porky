@@ -58,6 +58,7 @@ class porky.Register
   register_f2s = (obj_path)->
     main_obj = eval(obj_path)
     register_fixture.checked_objects = []
+    checked_paths = []
     native_func = /(return)? *function .*\(.*\) {\n? +\[?native (function)?/
     avoid_objects = ["window['performance']","window['event']","window['console']","window['document']","window['history']","window['clientInformation']","window['navigator']","window['$']","window['Audio']","window['Image']","window['Option']"]
     helper = (help_obj,path)->
