@@ -4,8 +4,12 @@
   window.destroy_test = {
     name: "destroy test",
     func: "destroy",
-    arg: ["destroyer", "darth vader"],
-    json_paths: ['window.eric']
+    arg: ["destroyer", "darth vader"]
+  };
+
+  window.normal = {
+    name: "normal test",
+    func: "change"
   };
 
   window.eric = {
@@ -28,8 +32,6 @@
       }
     }
   };
-
-  window.eric.self = window.eric;
 
   window.destroy = function(name, father) {
     eric.name = name;

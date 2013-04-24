@@ -139,24 +139,23 @@
 
     register_fixture = {
       obj: null,
-      arg: []
+      arg: [],
+      json_paths: []
     };
 
     register = function() {
       var obj;
       register_fixture.after_html = document.getElementsByTagName("html")[0].innerHTML;
-      if (register_fixture.json_paths != null) {
-        register_fixture.after_window = (function() {
-          var _i, _len, _ref, _results;
-          _ref = register_fixture.json_paths;
-          _results = [];
-          for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-            obj = _ref[_i];
-            _results.push(register_f2s(obj));
-          }
-          return _results;
-        })();
-      }
+      register_fixture.after_window = (function() {
+        var _i, _len, _ref, _results;
+        _ref = register_fixture.json_paths;
+        _results = [];
+        for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+          obj = _ref[_i];
+          _results.push(register_f2s(obj));
+        }
+        return _results;
+      })();
       return (new porky.Db(DBNAME, TABLE)).put(register_fixture);
     };
 

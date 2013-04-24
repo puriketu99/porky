@@ -2,7 +2,11 @@ window.destroy_test =
   name:"destroy test"
   func:"destroy"
   arg:["destroyer","darth vader"]
-  json_paths:['window.eric']
+  #  json_paths:['window.eric']
+
+window.normal = 
+  name:"normal test"
+  func:"change"
 
 window.eric = 
   name:"eric"
@@ -16,7 +20,7 @@ window.eric =
     mother:
       name:'mary'
       company:'horizon'
-window.eric.self = window.eric
+      #window.eric.self = window.eric
 
 window.destroy = (name,father)-> 
   eric.name = name

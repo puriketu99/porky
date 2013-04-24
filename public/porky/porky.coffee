@@ -84,10 +84,10 @@ class porky.Register
   register_fixture = 
     obj:null
     arg:[]
+    json_paths:[]
   register = ()->
     register_fixture.after_html = document.getElementsByTagName("html")[0].innerHTML
-    if register_fixture.json_paths?
-      register_fixture.after_window = (register_f2s obj for obj in register_fixture.json_paths) 
+    register_fixture.after_window = (register_f2s obj for obj in register_fixture.json_paths) 
     (new porky.Db(DBNAME,TABLE)).put register_fixture
   constructor:(register_data)->
     for field,value of register_data
