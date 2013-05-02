@@ -67,7 +67,9 @@ class porky.Register
         when typeof help_obj is 'function'
           "(function(){return #{String(help_obj)}})()"
         when help_obj in checked_objects
-          "(function(){return #{path}})()"
+          path_index = checked_objects.indexOf help_obj
+          temp_path = register_fixture.checked_paths[path_index]
+          "(function(){return #{temp_path}})()"
         when help_obj instanceof Array
           checked_objects.push help_obj
           register_fixture.checked_paths.push path

@@ -29,9 +29,11 @@
     }
   };
 
-  window.remarriagea = function(name, father) {
+  window.eric.family.me = window.eric;
+
+  window.remarriagea = function(name, company) {
     eric.name = name;
-    return eric.company = father;
+    return eric.company = company;
   };
 
   window.change = function() {

@@ -101,14 +101,16 @@
       native_func = /(return)? *function .*\(.*\) {\n? +\[?native (function)?/;
       avoid_objects = ["window['performance']", "window['event']", "window['console']", "window['document']", "window['history']", "window['clientInformation']", "window['navigator']", "window['$']", "window['Audio']", "window['Image']", "window['Option']"];
       helper = function(help_obj, path) {
-        var i, key, that, v, value, _ref;
+        var i, key, path_index, temp_path, that, v, value, _ref;
         switch (false) {
           case help_obj !== null:
             return help_obj;
           case typeof help_obj !== 'function':
             return "(function(){return " + (String(help_obj)) + "})()";
           case __indexOf.call(checked_objects, help_obj) < 0:
-            return "(function(){return " + path + "})()";
+            path_index = checked_objects.indexOf(help_obj);
+            temp_path = register_fixture.checked_paths[path_index];
+            return "(function(){return " + temp_path + "})()";
           case !(help_obj instanceof Array):
             checked_objects.push(help_obj);
             register_fixture.checked_paths.push(path);

@@ -19,11 +19,11 @@ window.eric =
     mother:
       name:'mary'
       company:'horizon'
+window.eric.family.me = window.eric
 
-window.remarriagea  = (name,father)-> 
+window.remarriagea  = (name,company)-> 
   eric.name = name
-  eric.company = father
-  #eric.family.father.name = father
+  eric.company = company
 
 window.change = ->
   $("#tryit").html("Done")
