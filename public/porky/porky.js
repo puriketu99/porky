@@ -169,7 +169,11 @@
       var eval_code, field, obj_path, value;
       for (field in register_data) {
         value = register_data[field];
-        register_fixture[field] = value;
+        if (field === 'arg') {
+          register_fixture[field] = register_f2s(value, 'fixture.arg', 'arg');
+        } else {
+          register_fixture[field] = value;
+        }
       }
       if (register_fixture.json_paths != null) {
         register_fixture.before_window = (function() {
