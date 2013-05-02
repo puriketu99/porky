@@ -1,8 +1,8 @@
-window.destroy_test = 
+window.destroy = 
   name:"destroy test"
-  func:"destroy"
+  func:"remarriagea"
   arg:["destroyer","darth vader"]
-  #  json_paths:['window.eric']
+  json_paths:['window.eric']
 
 window.normal = 
   name:"normal test"
@@ -11,20 +11,19 @@ window.normal =
 window.eric = 
   name:"eric"
   company:"google"
-  intro:()->console.log this.name
+  intro:->
   family:
     father:
       name:'mark'
       comapny:'facebook'
-      intro:()->console.log this.name
     mother:
       name:'mary'
       company:'horizon'
-      #window.eric.self = window.eric
 
-window.destroy = (name,father)-> 
+window.remarriagea  = (name,father)-> 
   eric.name = name
-  eric.family.father.name = father
+  eric.company = father
+  #eric.family.father.name = father
 
 window.change = ->
   $("#tryit").html("Done")
