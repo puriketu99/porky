@@ -85,7 +85,7 @@
   })();
 
   porky.Register = (function() {
-    var DBNAME, TABLE, register, register_f2s, register_fixture;
+    var DBNAME, TABLE, checked_objects, register, register_f2s, register_fixture;
 
     Register.name = 'Register';
 
@@ -93,11 +93,12 @@
 
     TABLE = 'fixtures';
 
-    register_f2s = function(obj_path) {
-      var avoid_objects, checked_objects, helper, main_obj, native_func;
-      main_obj = eval(obj_path);
-      checked_objects = [];
-      register_fixture.checked_paths = [];
+    checked_objects = {};
+
+    register_f2s = function(obj, obj_path, obj_type) {
+      var avoid_objects, helper, native_func;
+      checked_objects[obj_type] = [];
+      register_fixture.checked_paths[obj_type] = register_fixture.checked_paths[obj_type] || [];
       native_func = /(return)? *function .*\(.*\) {\n? +\[?native (function)?/;
       avoid_objects = ["window['performance']", "window['event']", "window['console']", "window['document']", "window['history']", "window['clientInformation']", "window['navigator']", "window['$']", "window['Audio']", "window['Image']", "window['Option']"];
       helper = function(help_obj, path) {
@@ -107,13 +108,13 @@
             return help_obj;
           case typeof help_obj !== 'function':
             return "(function(){return " + (String(help_obj)) + "})()";
-          case __indexOf.call(checked_objects, help_obj) < 0:
-            path_index = checked_objects.indexOf(help_obj);
-            temp_path = register_fixture.checked_paths[path_index];
+          case __indexOf.call(checked_objects[obj_type], help_obj) < 0:
+            path_index = checked_objects[obj_type].indexOf(help_obj);
+            temp_path = register_fixture.checked_paths[obj_type][path_index];
             return "(function(){return " + temp_path + "})()";
           case !(help_obj instanceof Array):
-            checked_objects.push(help_obj);
-            register_fixture.checked_paths.push(path);
+            checked_objects[obj_type].push(help_obj);
+            register_fixture.checked_paths[obj_type].push(path);
             return (function() {
               var _i, _len, _results;
               _results = [];
@@ -124,8 +125,8 @@
               return _results;
             })();
           case typeof help_obj !== "object":
-            checked_objects.push(help_obj);
-            register_fixture.checked_paths.push(path);
+            checked_objects[obj_type].push(help_obj);
+            register_fixture.checked_paths[obj_type].push(path);
             that = {};
             for (key in help_obj) {
               value = help_obj[key];
@@ -138,25 +139,26 @@
             return help_obj;
         }
       };
-      return helper(main_obj, obj_path);
+      return helper(obj, obj_path);
     };
 
     register_fixture = {
       obj: null,
       arg: [],
-      json_paths: []
+      json_paths: [],
+      checked_paths: {}
     };
 
     register = function() {
-      var obj;
+      var obj_path;
       register_fixture.after_html = document.getElementsByTagName("html")[0].innerHTML;
       register_fixture.after_window = (function() {
         var _i, _len, _ref, _results;
         _ref = register_fixture.json_paths;
         _results = [];
         for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-          obj = _ref[_i];
-          _results.push(register_f2s(obj));
+          obj_path = _ref[_i];
+          _results.push(register_f2s(eval(obj_path), obj_path, "after_window"));
         }
         return _results;
       })();
@@ -164,7 +166,7 @@
     };
 
     function Register(register_data) {
-      var eval_code, field, obj, value;
+      var eval_code, field, obj_path, value;
       for (field in register_data) {
         value = register_data[field];
         register_fixture[field] = value;
@@ -175,15 +177,15 @@
           _ref = register_fixture.json_paths;
           _results = [];
           for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-            obj = _ref[_i];
-            _results.push(register_f2s(obj));
+            obj_path = _ref[_i];
+            _results.push(register_f2s(eval(obj_path), obj_path, "before_window"));
           }
           return _results;
         })();
       }
       register_fixture.before_html = document.getElementsByTagName("html")[0].innerHTML;
       eval_code = "" + register_fixture.func + ".apply(register_fixture.obj,register_fixture.arg)";
-      eval(eval_code);
+      register_fixture.return_value = register_f2s(eval(eval_code), 'fixture.return_value', 'return_value');
       register_fixture.delay = register_fixture.delay || 0;
       setTimeout(function() {
         return register();

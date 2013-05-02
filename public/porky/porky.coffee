@@ -54,10 +54,10 @@ class porky.Db
 class porky.Register
   DBNAME = 'PORKY'
   TABLE = 'fixtures'
-  register_f2s = (obj_path)->
-    main_obj = eval(obj_path)
-    checked_objects = []
-    register_fixture.checked_paths = []
+  checked_objects = {}
+  register_f2s = (obj,obj_path,obj_type)->
+    checked_objects[obj_type] = []
+    register_fixture.checked_paths[obj_type] = register_fixture.checked_paths[obj_type] || []
     native_func = /(return)? *function .*\(.*\) {\n? +\[?native (function)?/
     avoid_objects = ["window['performance']","window['event']","window['console']","window['document']","window['history']","window['clientInformation']","window['navigator']","window['$']","window['Audio']","window['Image']","window['Option']"]
     helper = (help_obj,path)->
@@ -66,40 +66,41 @@ class porky.Register
           help_obj
         when typeof help_obj is 'function'
           "(function(){return #{String(help_obj)}})()"
-        when help_obj in checked_objects
-          path_index = checked_objects.indexOf help_obj
-          temp_path = register_fixture.checked_paths[path_index]
+        when help_obj in checked_objects[obj_type]
+          path_index = checked_objects[obj_type].indexOf help_obj
+          temp_path = register_fixture.checked_paths[obj_type][path_index]
           "(function(){return #{temp_path}})()"
         when help_obj instanceof Array
-          checked_objects.push help_obj
-          register_fixture.checked_paths.push path
+          checked_objects[obj_type].push help_obj
+          register_fixture.checked_paths[obj_type].push path
           return (helper v,"#{path}[#{i}]" for v,i in help_obj)
         when typeof help_obj is "object"
-          checked_objects.push help_obj
-          register_fixture.checked_paths.push path
+          checked_objects[obj_type].push help_obj
+          register_fixture.checked_paths[obj_type].push path
           that = {}
           for key,value of help_obj
             if !(String(value).match native_func) and "#{path}['#{key}']" not in avoid_objects and key isnt 'enabledPlugin' 
               that[key] = helper value,"#{path}['#{key}']"
           return that
         else help_obj
-    helper(main_obj,obj_path)
+    helper(obj,obj_path)
   register_fixture = 
     obj:null
     arg:[]
     json_paths:[]
+    checked_paths:{}
   register = ()->
     register_fixture.after_html = document.getElementsByTagName("html")[0].innerHTML
-    register_fixture.after_window = (register_f2s obj for obj in register_fixture.json_paths) 
+    register_fixture.after_window = (register_f2s(eval(obj_path),obj_path,"after_window") for obj_path in register_fixture.json_paths) 
     (new porky.Db(DBNAME,TABLE)).put register_fixture
   constructor:(register_data)->
     for field,value of register_data
       register_fixture[field] = value
     if register_fixture.json_paths?
-      register_fixture.before_window = (register_f2s obj for obj in register_fixture.json_paths)
+      register_fixture.before_window = (register_f2s(eval(obj_path),obj_path,"before_window") for obj_path in register_fixture.json_paths) 
     register_fixture.before_html = document.getElementsByTagName("html")[0].innerHTML
     eval_code = "#{register_fixture.func}.apply(register_fixture.obj,register_fixture.arg)"
-    eval eval_code
+    register_fixture.return_value =  register_f2s(eval(eval_code),'fixture.return_value','return_value')
     register_fixture.delay =  register_fixture.delay || 0
     setTimeout(
       ->register(),
