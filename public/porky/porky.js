@@ -94,10 +94,10 @@
     TABLE = 'fixtures';
 
     register_f2s = function(obj_path) {
-      var avoid_objects, checked_paths, helper, main_obj, native_func;
+      var avoid_objects, checked_objects, helper, main_obj, native_func;
       main_obj = eval(obj_path);
-      register_fixture.checked_objects = [];
-      checked_paths = [];
+      checked_objects = [];
+      register_fixture.checked_paths = [];
       native_func = /(return)? *function .*\(.*\) {\n? +\[?native (function)?/;
       avoid_objects = ["window['performance']", "window['event']", "window['console']", "window['document']", "window['history']", "window['clientInformation']", "window['navigator']", "window['$']", "window['Audio']", "window['Image']", "window['Option']"];
       helper = function(help_obj, path) {
@@ -107,10 +107,11 @@
             return help_obj;
           case typeof help_obj !== 'function':
             return "(function(){return " + (String(help_obj)) + "})()";
-          case __indexOf.call(register_fixture.checked_objects, help_obj) < 0:
+          case __indexOf.call(checked_objects, help_obj) < 0:
             return "(function(){return " + path + "})()";
           case !(help_obj instanceof Array):
-            register_fixture.checked_objects.push(help_obj);
+            checked_objects.push(help_obj);
+            register_fixture.checked_paths.push(path);
             return (function() {
               var _i, _len, _results;
               _results = [];
@@ -121,7 +122,8 @@
               return _results;
             })();
           case typeof help_obj !== "object":
-            register_fixture.checked_objects.push(help_obj);
+            checked_objects.push(help_obj);
+            register_fixture.checked_paths.push(path);
             that = {};
             for (key in help_obj) {
               value = help_obj[key];

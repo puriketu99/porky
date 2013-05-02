@@ -38,7 +38,6 @@ class porky.Db
         )
   find:(name)->
     $.indexedDB(DBNAME,SCHEMA).objectStore(TABLE).get(name)
-
   get:(run)->
     list = []
     $.indexedDB(DBNAME,SCHEMA).objectStore(TABLE).index('name').each((e)->
@@ -57,8 +56,8 @@ class porky.Register
   TABLE = 'fixtures'
   register_f2s = (obj_path)->
     main_obj = eval(obj_path)
-    register_fixture.checked_objects = []
-    checked_paths = []
+    checked_objects = []
+    register_fixture.checked_paths = []
     native_func = /(return)? *function .*\(.*\) {\n? +\[?native (function)?/
     avoid_objects = ["window['performance']","window['event']","window['console']","window['document']","window['history']","window['clientInformation']","window['navigator']","window['$']","window['Audio']","window['Image']","window['Option']"]
     helper = (help_obj,path)->
@@ -67,13 +66,15 @@ class porky.Register
           help_obj
         when typeof help_obj is 'function'
           "(function(){return #{String(help_obj)}})()"
-        when help_obj in register_fixture.checked_objects
+        when help_obj in checked_objects
           "(function(){return #{path}})()"
         when help_obj instanceof Array
-          register_fixture.checked_objects.push help_obj
+          checked_objects.push help_obj
+          register_fixture.checked_paths.push path
           return (helper v,"#{path}[#{i}]" for v,i in help_obj)
         when typeof help_obj is "object"
-          register_fixture.checked_objects.push help_obj
+          checked_objects.push help_obj
+          register_fixture.checked_paths.push path
           that = {}
           for key,value of help_obj
             if !(String(value).match native_func) and "#{path}['#{key}']" not in avoid_objects and key isnt 'enabledPlugin' 
