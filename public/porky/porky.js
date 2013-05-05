@@ -372,7 +372,7 @@
       if (arg.fixture.after_html === document.getElementsByTagName("html")[0].innerHTML) {
         success();
       } else {
-        console.error('ui fail');
+        fail();
       }
       console.groupEnd('UI test');
       console.group('Return value test');

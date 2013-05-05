@@ -220,8 +220,6 @@ class porky.Runner
         return
       helper(obj,obj_path)
       return flag
-
-
     console.group 'Fixture'
     console.log arg.fixture
     console.groupEnd 'Fixture'
@@ -229,7 +227,7 @@ class porky.Runner
     if arg.fixture.after_html is document.getElementsByTagName("html")[0].innerHTML
       success()
     else
-      console.error 'ui fail'
+      fail()
     console.groupEnd 'UI test'
     console.group 'Return value test'
     flag = after_f2s(arg.current_return_value,'arg.current_return_value','return_value')
