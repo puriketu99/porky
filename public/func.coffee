@@ -1,43 +1,32 @@
-window.append = ()->
-  $("#tests").append("test case1")
-
-window.ajax = ()->
-  $.ajax({url:'sample.json'}).done(
-    (items)->
-      for item in items
-        $("#tests").append(JSON.stringify(item))
-  )
-window.destroy = (name,father)-> 
-  eric.name = name
-  eric.family.father.name = father
-
-window.append_test =
-  name:"append test"
-  func:"append"
-
-window.ajax_test = 
-  name:"ajax test"
-  func:"ajax"
-  is_ajax:true
-
-window.destroy_test = 
+window.destroy = 
   name:"destroy test"
-  func:"destroy"
+  func:"remarriagea"
   arg:["destroyer","darth vader"]
+  delay:1000
   json_paths:['window.eric']
+
+window.normal = 
+  name:"normal test"
+  func:"change"
+  delay:1000
 
 window.eric = 
   name:"eric"
   company:"google"
-  intro:()->console.log this.name
+  intro:->
   family:
     father:
       name:'mark'
       comapny:'facebook'
-      intro:()->console.log this.name
     mother:
       name:'mary'
       company:'horizon'
+      #window.eric.family.me = window.eric
+
+window.remarriagea  = (name,company)-> 
+  eric.name = name
+  eric.company = company
+  eric
+
 window.change = ->
   $("#tryit").html("Done")
-
