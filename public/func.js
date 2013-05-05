@@ -5,12 +5,14 @@
     name: "destroy test",
     func: "remarriagea",
     arg: ["destroyer", "darth vader"],
+    delay: 1000,
     json_paths: ['window.eric']
   };
 
   window.normal = {
     name: "normal test",
-    func: "change"
+    func: "change",
+    delay: 1000
   };
 
   window.eric = {
@@ -29,11 +31,10 @@
     }
   };
 
-  window.eric.family.me = window.eric;
-
   window.remarriagea = function(name, company) {
     eric.name = name;
-    return eric.company = company;
+    eric.company = company;
+    return eric;
   };
 
   window.change = function() {

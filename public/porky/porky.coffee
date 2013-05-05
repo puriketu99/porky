@@ -3,6 +3,23 @@ window.IDBTransaction = window.IDBTransaction || window.webkitIDBTransaction || 
 window.IDBKeyRange = window.IDBKeyRange|| window.webkitIDBKeyRange || window.msIDBKeyRange
 window.IDBCursor = window.IDBCursor || window.webkitIDBCursor || window.msIDBCursor
 
+avoid_objects = ["window['performance']"
+"window['event']"
+"window['console']"
+"window['document']"
+"window['history']"
+"window['clientInformation']"
+"window['navigator']"
+"window['$']"
+"window['Audio']"
+"window['Image']"
+"window['Option']"
+]
+success = ->
+  console.log '%csuccess','background-color:green;color:white'
+fail = ->
+  console.log '%cfail','background-color:red;color:white'
+
 window.porky = {}
 class porky.Db
   DBNAME = ''
@@ -15,7 +32,7 @@ class porky.Db
     console.groupEnd "Report"
   register_report = (data)->
     console.group "Registed"
-    console.log "success"
+    success()
     console.log data
     console.groupEnd "Registed"
   constructor:(dbname,table)->
@@ -59,7 +76,6 @@ class porky.Register
     checked_objects[obj_type] = []
     register_fixture.checked_paths[obj_type] = register_fixture.checked_paths[obj_type] || []
     native_func = /(return)? *function .*\(.*\) {\n? +\[?native (function)?/
-    avoid_objects = ["window['performance']","window['event']","window['console']","window['document']","window['history']","window['clientInformation']","window['navigator']","window['$']","window['Audio']","window['Image']","window['Option']"]
     helper = (help_obj,path)->
       switch 
         when help_obj is null
@@ -74,6 +90,9 @@ class porky.Register
           checked_objects[obj_type].push help_obj
           register_fixture.checked_paths[obj_type].push path
           return (helper v,"#{path}[#{i}]" for v,i in help_obj)
+        when help_obj instanceof jQuery
+          console.log('%cPorky does not support jQuery objects','color:#666')
+          'jQuery object'
         when typeof help_obj is "object"
           checked_objects[obj_type].push help_obj
           register_fixture.checked_paths[obj_type].push path
@@ -119,24 +138,12 @@ class porky.Reregister
 class porky.Runner
   DBNAME = 'PORKY'
   TABLE = 'fixtures'
-  zip = (arr1, arr2) ->
-    basic_zip = (el1, el2) -> [el1, el2]
-    zipWith basic_zip, arr1, arr2
-  zipWith = (func, arr1, arr2) ->
-    min = Math.min arr1.length, arr2.length
-    ret = []
-    for i in [0...min]
-      ret.push func(arr1[i], arr2[i])
-    ret
   func_pattern = /\(function\(\)\{return /
-
-  before_s2f = (db_obj,path)->
+  before_s2f = (obj,obj_path)->
     setw = (path,help_db)->
       eval_str = "#{path} = help_db"
       eval(eval_str)
     helper = (help_db,path)->
-      if path is "window['Audio']"
-        console.log "path"
       switch 
         when help_db instanceof Array
           for v in help_db
@@ -149,83 +156,99 @@ class porky.Runner
         else
           setw path,help_db
       return
-    helper(db_obj,path)
-
-  after_f2s = (db_obj,path)->
-    inner_fail = (expected,actual,path)-> 
-      console.group 'json fail'
-      console.error 'fail'
-      console.group 'json path'
-      console.log path 
-      console.groupEnd 'json path'
-      console.group 'expected'
-      console.log expected
-      console.groupEnd 'expected'
-      console.group 'actual'
-      console.log actual
-      console.groupEnd 'actual'
-      console.groupEnd 'json fail'
-      flag = false
-    not_same_type = (expected,actual)->
-     typeof expected isnt typeof actual 
-    flag = true
-    helper = (help_db,path)->
-      help_window = eval(path)
-      switch 
-        when help_db is null
-          if help_window isnt null
-            inner_fail(help_db,help_window,path)
-        when help_db instanceof Array
-          if help_db.length isnt help_window.length or not_same_type(help_db,help_window)
-            inner_fail(help_db,help_window)
-          else
-            (helper help_db[i],"#{path}[#{i}]" for v,i in help_window)
-        when typeof help_window is 'object' and typeof help_db is 'string' and help_db.match(func_pattern) isnt null
-          evaled_obj = eval(help_db)
-          if evaled_obj isnt help_window
-            inner_fail(evaled_obj,help_window,path)
-        when typeof help_db is "object"
-          if not_same_type(help_db,help_window)
-            inner_fail(help_db,help_window,path)
-          else
-            for key,value of help_db
-              helper help_db[key],"#{path}['#{key}']"
-        when typeof help_window is 'function'
-          window_func = "(function(){return #{String(help_window)}})()"
-          if help_db isnt window_func
-            evaled_func = eval(help_db)
-            inner_fail(evaled_func,help_window,path)
-        else
-          if help_db isnt help_window
-            inner_fail(help_db,help_window,path)
-      return
-    helper(db_obj,path)
-    return flag
-
+    helper(obj,obj_path)
   judge = (arg)->
+    after_f2s = (obj,obj_path,obj_type)->
+      fixture = arg.fixture
+      inner_fail = (expected,actual,path)-> 
+        console.group 'javascript object fail'
+        console.log '%cfail','background-color:red;color:white'
+        console.group 'json path'
+        console.log path 
+        console.groupEnd 'json path'
+        console.group 'expected'
+        console.log expected
+        console.groupEnd 'expected'
+        console.group 'actual'
+        console.log actual
+        console.groupEnd 'actual'
+        console.groupEnd 'json fail'
+        flag = false
+      not_same_type = (expected,actual)->
+       typeof expected isnt typeof actual 
+      flag = true
+      checked_objects = []
+      helper = (help_db,path)->
+        help_window = eval(path)
+        switch 
+          when help_db is null
+            if help_window isnt null
+              inner_fail(help_db,help_window,path)
+          when help_window instanceof jQuery
+            console.log('%cPorky does not support jQuery objects','color:#666')
+            'jQuery object'
+          when help_db in checked_objects
+            path_index = checked_objects.indexOf help_db
+            db_path = fixture.checked_paths[obj_type][path_index]
+            evaled_obj = eval(db_path)
+          when help_db instanceof Array
+            checked_objects.push help_db
+            if help_db.length isnt help_window.length or not_same_type(help_db,help_window)
+              inner_fail(help_db,help_window)
+            else
+              (helper help_db[i],"#{path}[#{i}]" for v,i in help_window)
+          when typeof help_window is 'object' and typeof help_db is 'string' and help_db.match(func_pattern) isnt null
+            evaled_obj = eval(help_db)
+            checked_objects.push evaled_obj
+            if evaled_obj isnt help_window
+              inner_fail(evaled_obj,help_window,path)
+          when typeof help_db is "object"
+            checked_objects.push help_db
+            if not_same_type(help_db,help_window)
+              inner_fail(help_db,help_window,path)
+            else
+              for key,value of help_db
+                helper help_db[key],"#{path}['#{key}']"
+          when typeof help_window is 'function' and typeof help_db is 'string'
+            window_func = "(function(){return #{String(help_window)}})()"
+            if help_db isnt window_func
+              evaled_func = eval(help_db)
+              inner_fail(evaled_func,help_window,path)
+          else
+            if help_db isnt help_window
+              inner_fail(help_db,help_window,path)
+        return
+      helper(obj,obj_path)
+      return flag
+
+
     console.group 'Fixture'
     console.log arg.fixture
     console.groupEnd 'Fixture'
     console.group 'UI test'
     if arg.fixture.after_html is document.getElementsByTagName("html")[0].innerHTML
-      console.log 'success'
+      success()
     else
       console.error 'ui fail'
     console.groupEnd 'UI test'
+    console.group 'Return value test'
+    flag = after_f2s(arg.current_return_value,'arg.current_return_value','return_value')
+    if flag
+      success()
+    console.groupEnd 'Return value test'
     console.group 'JSON test'
     if arg.fixture.json_paths?
-      flags = (after_f2s(arg.fixture.after_window[i],path) for path,i in arg.fixture.json_paths)
+      flags = (after_f2s(arg.fixture.after_window[i],path,'after_window') for path,i in arg.fixture.json_paths)
     else
       flags = []
     if false not in flags
-      console.log 'success'
+      success()
     console.groupEnd 'JSON test'
     console.log "Delay: #{arg.fixture.delay}ms"
     console.timeEnd arg.fixture.name
     console.groupEnd arg.fixture.name
     arg.dfd.resolve()
     return
-  
   test = (list)->
     if list.length is 0
       console.timeEnd 'Porky'
@@ -248,9 +271,9 @@ class porky.Runner
         return 'test error'
     )
     eval_code = "#{fixture.func}.apply(fixture.obj,fixture.arg)"
-    eval eval_code
+    current_return_value = eval(eval_code)
     setTimeout(
-      ->judge({"fixture":fixture,"dfd":dfd}),
+      ->judge({"fixture":fixture,"dfd":dfd,"current_return_value":current_return_value}),
       fixture.delay)
 
   constructor:()->
