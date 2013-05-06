@@ -14,11 +14,11 @@
   avoid_objects = ["window['performance']", "window['event']", "window['console']", "window['document']", "window['history']", "window['clientInformation']", "window['navigator']", "window['$']", "window['Audio']", "window['Image']", "window['Option']"];
 
   success = function() {
-    return console.log('%csuccess', 'background-color:green;color:white');
+    return console.log("%csuccess", "background-color:#5bb75b;color:white");
   };
 
   fail = function() {
-    return console.log('%cfail', 'background-color:red;color:white');
+    return console.log("%cfail", "background-color:#da4f49;color:white");
   };
 
   window.porky = {};
