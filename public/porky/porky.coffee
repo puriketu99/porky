@@ -16,9 +16,9 @@ avoid_objects = ["window['performance']"
 "window['Option']"
 ]
 success = ->
-  console.log '%csuccess','background-color:green;color:white'
+  console.log("%csuccess","background-color:#5bb75b;color:white")
 fail = ->
-  console.log '%cfail','background-color:red;color:white'
+  console.log("%cfail","background-color:#da4f49;color:white")
 
 window.porky = {}
 class porky.Db
