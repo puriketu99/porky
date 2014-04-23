@@ -1,3 +1,5 @@
+#Kill TDD!!
+
 #Without coding test, test automation for JavaScript.
 
 ##Principal use
