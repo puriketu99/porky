@@ -1,11 +1,20 @@
 GEM
   remote: http://rubygems.org/
   specs:
-    rack (1.2.1)
-    sinatra (1.1.2)
-      rack (~> 1.1)
-      tilt (~> 1.2)
-    tilt (1.2.2)
+    base64 (0.2.0)
+    mustermann (3.0.3)
+      ruby2_keywords (~> 0.0.1)
+    rack (2.2.11)
+    rack-protection (3.2.0)
+      base64 (>= 0.1.0)
+      rack (~> 2.2, >= 2.2.4)
+    ruby2_keywords (0.0.5)
+    sinatra (3.2.0)
+      mustermann (~> 3.0)
+      rack (~> 2.2, >= 2.2.4)
+      rack-protection (= 3.2.0)
+      tilt (~> 2.0)
+    tilt (2.6.0)
 
 PLATFORMS
   ruby
